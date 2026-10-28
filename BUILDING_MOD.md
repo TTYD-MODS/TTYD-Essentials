@@ -37,14 +37,9 @@ python3 tools/debugmod/package.py \
 
 Both output paths must be new. The patch contains the mod payload and its manifest. The installer ZIP contains that patch, the Python installer, and instructions; neither artifact contains the original DOL, an ISO, or game assets. The `.ttydpatch` also works with the repository's `tools/debugmod/patch.py --patch` option.
 
-To publish a release after pushing the repository to GitHub, create and push a version tag:
+Every push to `main` builds the patch and publishes a GitHub release tagged `build-<run number>-<attempt>`, pointing to the pushed commit. Pushing a version tag such as `v1.0.0` also publishes a release using that tag. Each release contains the patch and installer ZIP.
 
-```sh
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-The release workflow checks out the pinned upstream source, downloads the upstream project's pinned toolchain, builds the payload, runs the tests, and publishes both files as GitHub release assets. It requires GitHub Actions to be enabled and permission for the workflow to write repository contents. No original game image is needed by the workflow. The workflow uses a GitHub-hosted macOS Intel runner; it has not yet been verified in a live GitHub run. If a release already exists for the tag, the publishing step fails instead of replacing its assets.
+The workflow checks out the pinned upstream source, downloads the upstream project's pinned toolchain, builds the payload, and runs the tests before publishing. It requires GitHub Actions to be enabled and permission to write repository contents. No original game image is needed. The workflow uses a GitHub-hosted macOS Intel runner. If a release already exists for a version tag, the publishing step fails instead of replacing its assets.
 
 ## Tests
 
