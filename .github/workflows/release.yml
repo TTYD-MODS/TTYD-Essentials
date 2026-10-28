@@ -1,0 +1,62 @@
+name: Publish patch release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-15-intel
+    steps:
+      - name: Check out TTYD Essentials
+        uses: actions/checkout@v4
+      - name: Check out upstream build inputs
+        uses: actions/checkout@v4
+        with:
+          repository: LLCOOLT/ttyd
+          ref: 84d1001ce033f7998e118f62a8aa4835134f40ac
+          path: upstream
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download pinned build tools
+        run: |
+          mkdir -p "$RUNNER_TEMP/ttyd-tools" "$RUNNER_TEMP/ttyd-compilers" "$RUNNER_TEMP/ttyd-binutils"
+          python3 upstream/tools/download_tool.py wibo "$RUNNER_TEMP/ttyd-tools/wibo" --tag 1.1.0
+          python3 upstream/tools/download_tool.py sjiswrap "$RUNNER_TEMP/ttyd-tools/sjiswrap.exe" --tag v1.2.2
+          python3 upstream/tools/download_tool.py compilers "$RUNNER_TEMP/ttyd-compilers" --tag 20260305
+          python3 upstream/tools/download_tool.py binutils "$RUNNER_TEMP/ttyd-binutils" --tag 2.42-2
+      - name: Build patch payload
+        run: |
+          python3 tools/debugmod/build.py \
+            --upstream "$GITHUB_WORKSPACE/upstream" \
+            --tools "$RUNNER_TEMP/ttyd-tools" \
+            --compilers "$RUNNER_TEMP/ttyd-compilers" \
+            --binutils "$RUNNER_TEMP/ttyd-binutils" \
+            --output "$RUNNER_TEMP/ttyd-payload"
+      - name: Run tests
+        env:
+          TTYD_UPSTREAM: ${{ github.workspace }}/upstream
+          TTYD_DEBUGMOD_BUILD_DIR: ${{ runner.temp }}/ttyd-payload
+          TTYD_DEBUGMOD_OBJDUMP: ${{ runner.temp }}/ttyd-binutils/powerpc-eabi-objdump
+        run: python3 -m unittest discover -s tests/debugmod -v
+      - name: Package release
+        run: |
+          python3 tools/debugmod/package.py \
+            --payload-dir "$RUNNER_TEMP/ttyd-payload" \
+            --output dist/TTYD-Essentials.ttydpatch \
+            --bundle dist/TTYD-Essentials-release.zip
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --verify-tag \
+            --generate-notes \
+            dist/TTYD-Essentials.ttydpatch \
+            dist/TTYD-Essentials-release.zip

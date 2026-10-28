@@ -35,7 +35,16 @@ python3 tools/debugmod/package.py \
   --bundle dist/TTYD-Essentials-release.zip
 ```
 
-Both output paths must be new. The patch contains the mod payload and its manifest. The installer ZIP contains that patch, the Python installer, and instructions; neither artifact contains the original DOL, an ISO, or game assets. Upload the ZIP to a GitHub release after creating one for this repository. You may also upload the `.ttydpatch` for use with the repository's `tools/debugmod/patch.py --patch` option. Creating and publishing GitHub releases is not automated by this repository.
+Both output paths must be new. The patch contains the mod payload and its manifest. The installer ZIP contains that patch, the Python installer, and instructions; neither artifact contains the original DOL, an ISO, or game assets. The `.ttydpatch` also works with the repository's `tools/debugmod/patch.py --patch` option.
+
+To publish a release after pushing the repository to GitHub, create and push a version tag:
+
+```sh
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The release workflow checks out the pinned upstream source, downloads the upstream project's pinned toolchain, builds the payload, runs the tests, and publishes both files as GitHub release assets. It requires GitHub Actions to be enabled and permission for the workflow to write repository contents. No original game image is needed by the workflow. The workflow uses a GitHub-hosted macOS Intel runner; it has not yet been verified in a live GitHub run. If a release already exists for the tag, the publishing step fails instead of replacing its assets.
 
 ## Tests
 
