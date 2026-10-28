@@ -1,0 +1,29 @@
+# Generated output and local tooling
+build/
+dist/
+*.ttydpatch
+__pycache__/
+*.py[cod]
+*.o
+*.elf
+*.exe
+*.map
+
+# Game images, executables, assets, memory cards and emulator captures
+*.iso
+*.gcm
+*.rvz
+*.wbfs
+*.gcz
+*.wia
+*.ciso
+*.dol
+*.rel
+*.gci
+*.raw
+*.dtm
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vs/

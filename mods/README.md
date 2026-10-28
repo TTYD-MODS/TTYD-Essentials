@@ -1,0 +1,14 @@
+# TTYD Essentials menu guide
+
+Open or close with **L + R + Z + Start**. The selected row is yellow. Up/down selects a row, left/right changes a value, A activates the selected action, and B closes the menu. Hold X or Y for larger steps where offered. Press L while the menu is open to cycle pages.
+
+- **State / warp:** edit raw story progress and global flags, browse maps, or warp. On story progress, A advances to a known event and Z warps to its map. The warp sets progress to the preceding event so the selected event can run; other flags can still affect the scene. Flag descriptions cover only researched values. Missing map files block a warp, but a valid file does not guarantee a safe story state or entrance.
+- **Character / partner:** choose Mario, Peach, or Bowser and press A to apply. Cycle partners through OFF, NORMAL, SUPER, and ULTRA with A. Z dismisses the active partner without removing a story follower. Dismiss partners before selecting Peach or Bowser. Upgrade changes recalculate and heal the partner.
+- **Stats / save:** edit current and maximum HP/FP, BP, coins, and Star Pieces. Press Z on a stat to lock or unlock it; a star indicates a lock. Locks clear at the title screen, and some battle values may be maintained separately. Save Game opens the game's normal save prompts when it is safe to start them.
+- **Exploration:** toggle free camera and horizontal wall bypass with A; select camera speed from x1 to x5. Close the menu to use the camera: left stick moves relative to the view, C-stick aims, and L/R analog triggers move down/up. Normal player input is suppressed while it is active. Both modes turn off on map transitions. Wall bypass keeps normal floor checks but does not prevent falls off edges.
+- **Story presets:** select an event and confirm Apply Preset twice. This resets saved-work flags and pouch/partners, applies the game's E3 debug initializers, and warps. It is an approximation rather than a normal-play snapshot; restart after repeated uses because the game allocates a new pouch each time.
+- **Room entrances:** named entrances are available for the currently loaded room; load another room first to list its entrances.
+- **Inventory:** add or remove ordinary items and badges, and adjust Shine Sprites. Key items are excluded.
+- **Character stats:** adjust Mario or a partner's health and flat damage bonus/reduction. Press Z on a partner's maximum-HP row to restore the rank-derived value. Damage modifiers affect positive HP damage through the normal battle calculation, not all damage paths; they are not intrinsic attack or defense stats. Modifiers and HP overrides clear at the title screen.
+
+Changes can interact with events and saves in unexpected ways. Back up memory cards before use. See [modding notes](MODDING_NOTES.md) for detailed behavior and technical constraints.
